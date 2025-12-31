@@ -1,62 +1,48 @@
-% ´¦ÀíOAÊý¾Ý
+% å¤„ç†OAæ•°æ®
 clc;
 clear;
 eeglab;
 
 path = 'H:\OA\OA-Data2\*OA*';
-% »ñÈ¡Â·¾¶ÏÂµÄËùÓÐÌõÄ¿ÐÅÏ¢
+% èŽ·å–è·¯å¾„ä¸‹çš„æ‰€æœ‰æ¡ç›®ä¿¡æ¯
 subPath = dir(path);
-% ¹ýÂËµô.ºÍ..
+% è¿‡æ»¤æŽ‰.å’Œ..
 subPath = subPath(~ismember({subPath.name}, {'.', '..'}));
 markers = { '21','31','41','51','23','33','43','53'};
 timelist = [-2 5];
 
-% Ô­Ê¼ÎÄ¼þÂ·¾¶ÁÐ±í
-filePaths = {
 
-    'H:\OA\ProdData\OA-Data0720\20250108153604_Ñ¦Ï£½ÜOA_MIÓÒÊÖ11-1+42_ICAsub.mat',
-    'H:\OA\ProdData\OA-Data0720\20250115143847_ÈÎºØOA-MIÓÒÊÖ13-1+64_ICAsub.mat',
-    'H:\OA\ProdData\OA-Data0720\20250307110015_Ëï¾´Ò»OA-MI×óÊÖ30-1+33_ICAsub.mat',
-    'H:\OA\ProdData\OA-Data0720\20250311152226_ÑÖÑÞÑÞOA-MIÓÒÊÖ35-1+83_ICAsub.mat',
-    'H:\OA\ProdData\OA-Data0720\20250403140727_Âíº£³¼OA-FESÓÒÊÖ8-1+15_ICAsub.mat',
-    'H:\OA\ProdData\OA-Data0720\20250409114500_µÔÎÄÐûOA-FES×óÊÖ10-1+23_ICAsub.mat',
-    'H:\OA\ProdData\OA-Data0720\20250409134010_ÇúÍ¢²¨OA-FES×óÊÖ11-1+36_ICAsub.mat',
-    'H:\OA\ProdData\OA-Data0720\20250423161516_ÁÖÕþOA-FES13-1+19_ICAsub.mat',
-    'H:\OA\ProdData\OA-Data0720\20250512090938_ÕÅ±£ÁØOA-FES×óÊÖ16-1+42_ICAsub.mat'
-};
-
-
-% »ñÈ¡ËùÓÐÎÄ¼þÃû£¨È¥µôÂ·¾¶£©
-fileNames = cellfun(@(x) extractAfter(x, find(x == '\', 1, 'last')), filePaths, 'UniformOutput', false);
-% È¥µôÎÄ¼þÃûÖÐ '+' ¼°ÆäºóÃæµÄÄÚÈÝ£¨°üÀ¨À©Õ¹Ãû£©
+% èŽ·å–æ‰€æœ‰æ–‡ä»¶åï¼ˆåŽ»æŽ‰è·¯å¾„ï¼‰
+fileNames = cellfun(@(x) extractAfter(x, find(x == '\', 1, 'last')), subPath, 'UniformOutput', false);
+% åŽ»æŽ‰æ–‡ä»¶åä¸­ '+' åŠå…¶åŽé¢çš„å†…å®¹ï¼ˆåŒ…æ‹¬æ‰©å±•åï¼‰
 cleanNames = cellfun(@(x) regexprep(x, '\+.*$', ''), fileNames, 'UniformOutput', false);
 
-% ÌáÈ¡Æ¥ÅäµÄÎÄ¼þ£¨Ö»±£ÁôÔÚfileNamesÖÐ´æÔÚµÄ£©
+% æå–åŒ¹é…çš„æ–‡ä»¶ï¼ˆåªä¿ç•™åœ¨fileNamesä¸­å­˜åœ¨çš„ï¼‰
 matchedFiles = subPath(ismember({subPath.name}, cleanNames));
 subPath = matchedFiles;
 
 for i = 1:length(subPath)
 
-    % »ñÈ¡ÄÔµçÊý¾ÝÎÄ¼þÂ·¾¶
+    % èŽ·å–è„‘ç”µæ•°æ®æ–‡ä»¶è·¯å¾„
     folderPath = strcat(subPath(i).folder,'\', subPath(i).name);
-    % ¶ÁÈ¡ÄÔµçÊý¾ÝÖÐµÄËùÓÐÎÄ¼þ¼Ð
+    % è¯»å–è„‘ç”µæ•°æ®ä¸­çš„æ‰€æœ‰æ–‡ä»¶å¤¹
     dataPaths = dir(folderPath);
-    % ÌáÈ¡Ä³¸ö±»ÊÔµÄËùÓÐÎÄ¼þ¼Ð
+    % æå–æŸä¸ªè¢«è¯•çš„æ‰€æœ‰æ–‡ä»¶å¤¹
     names = {dataPaths.name};
-    % È»ºó½«Æä½øÐÐÅÅÐò  ºó×ª»»Îª×Ö·ûÐÎÊ½
+    % ç„¶åŽå°†å…¶è¿›è¡ŒæŽ’åº  åŽè½¬æ¢ä¸ºå­—ç¬¦å½¢å¼
     % foldernames = sort_folders(folderPath, names);
     EEG.etc.eeglabvers = '2023.1';
-    % ¶ÁÈ¡ÎÄ¼þ¼ÐÖÐµÄEEGÊý¾Ý
+    % è¯»å–æ–‡ä»¶å¤¹ä¸­çš„EEGæ•°æ®
     [EEG, command] = pop_importNDF(folderPath);
     EEG = eeg_checkset( EEG );
     EEG=pop_chanedit(EEG, 'lookup','D:\\matlab tools\\eeglab2021.1\\plugins\\dipfit\\standard_BEM\\elec\\standard_1005.elc');
     EEG = eeg_checkset( EEG );
-    % È¡Ë«²àÈéÍ»×÷Îª²Î¿¼
+    % å–åŒä¾§ä¹³çªä½œä¸ºå‚è€ƒ
     EEG = pop_reref(EEG, [17 18] );
-    % È«ÄÔÆ½¾ù×÷Îª²Î¿¼
+    % å…¨è„‘å¹³å‡ä½œä¸ºå‚è€ƒ
     %EEG = pop_reref( EEG, []);
     EEG = eeg_checkset( EEG );
-    EEG.urchanlocs = EEG.chanlocs; % ±¸·ÝÔ­Ê¼Î»ÖÃ
+    EEG.urchanlocs = EEG.chanlocs; % å¤‡ä»½åŽŸå§‹ä½ç½®
     EEG = pop_eegfiltnew(EEG, 'locutoff',1,'plotfreqz',0);
     EEG = eeg_checkset( EEG );
     EEG = pop_eegfiltnew(EEG, 'hicutoff',40,'plotfreqz',0);
@@ -67,23 +53,23 @@ for i = 1:length(subPath)
     % EEG = eeg_checkset( EEG );
     % pop_eegplot( EEG, 1, 1, 1);
     
-    % ·Ö¶Î
+    % åˆ†æ®µ
     EEG = pop_epoch( EEG, markers, timelist, 'epochinfo', 'yes');
     EEG = eeg_checkset( EEG );
-    % »ùÏß½ÃÕý
+    % åŸºçº¿çŸ«æ­£
     EEG = pop_rmbase( EEG, [timelist(1)*1000 0] ,[]);
     EEG = eeg_checkset( EEG );
     
-    % ½«Ô­Ê¼Êý¾ÝÖÐµÄ21+ÉÁË¸µÄ²¿·Ö¸ÄÎª 22  Õâ¸ö¸üÐÂºó²»±£Áô
+    % å°†åŽŸå§‹æ•°æ®ä¸­çš„21+é—ªçƒçš„éƒ¨åˆ†æ”¹ä¸º 22  è¿™ä¸ªæ›´æ–°åŽä¸ä¿ç•™
 %     for k = 41:80
 %         if length(EEG.epoch(k).eventtype) > 2 &&  EEG.epoch(k).eventtype{1}(2) == '1'
 %             EEG.epoch(k).eventtype{1}(2) = '2';
 %         else
-%             disp('´æÔÚÒ»Ð©ÎÊÌâ¡£¡£¡£¡£')
+%             disp('å­˜åœ¨ä¸€äº›é—®é¢˜ã€‚ã€‚ã€‚ã€‚')
 %         end
 %     end
 %     EEG = eeg_checkset( EEG );
-    % ¶Ôevent½øÐÐÐÞ¸ÄÔÙ¸üÐÂepoch
+    % å¯¹eventè¿›è¡Œä¿®æ”¹å†æ›´æ–°epoch
      for k = 41:length(EEG.event)-1
         if EEG.event(k+1).type(2) == '0'  &&  EEG.event(k).type(2) == '1'
             EEG.event(k).type(2) = '2';
@@ -93,19 +79,19 @@ for i = 1:length(subPath)
     
     [orEEG, badchans] = pop_rejchan(EEG, 'elec',[1:30] ,'threshold', 5, 'measure', 'kurt','norm','on');
     % EEG = eeg_checkset( EEG );
-    % ¶Ô»µµ¼½øÐÐ²åÖµ
+    % å¯¹åå¯¼è¿›è¡Œæ’å€¼
     EEG = eeg_interp(EEG, badchans, 'spherical');
     EEG = eeg_checkset( EEG );
     
-    % ¼ì²é»µµ¼ »µ¶Î
+    % æ£€æŸ¥åå¯¼ åæ®µ
     data = EEG.data;
     del_epoch = [];
     [channels, times, nepoch] = size(data);
-    % ±éÀúÃ¿¸ö¾ØÕó²¢¼ì²éÌõ¼þ
+    % éåŽ†æ¯ä¸ªçŸ©é˜µå¹¶æ£€æŸ¥æ¡ä»¶
     for k = 1:nepoch
-        A = data(:,:,k);  % µ±Ç°¾ØÕó
+        A = data(:,:,k);  % å½“å‰çŸ©é˜µ
         if max(A(:)) > 1200 || min(A(:)) < -1200
-            del_epoch = [del_epoch, k];  % ¼ÇÂ¼Âú×ãÌõ¼þµÄ¾ØÕóÐòºÅ
+            del_epoch = [del_epoch, k];  % è®°å½•æ»¡è¶³æ¡ä»¶çš„çŸ©é˜µåºå·
             greater_than_one = A > 300;
             count = sum(greater_than_one(:));
             A(greater_than_one) = 300;
@@ -116,20 +102,20 @@ for i = 1:length(subPath)
         data(:,:,k) = A;
     end
     EEG.data = data;
-    % ÌÞ³ý»µ¶Î  ÊýÖµÎªµÚ¼¸¶Î
+    % å‰”é™¤åæ®µ  æ•°å€¼ä¸ºç¬¬å‡ æ®µ
     EEG = pop_rejepoch( EEG, del_epoch ,0);
     
     
     
     % run ICA 
-    dataRank = sum(eig(cov(double(EEG.data(:,:,1)'))) > 1E-6); % Çó³öÊý¾ÝµÄrank
+    dataRank = sum(eig(cov(double(EEG.data(:,:,1)'))) > 1E-6); % æ±‚å‡ºæ•°æ®çš„rank
     EEG = pop_runica(EEG, 'icatype', 'runica', 'extended',1, 'pca',20,...
-        'stop',1E-7, 'interrupt','on'); % ÅÅ³ýÑÛµçºÍ·ÇÍ·Æ¤ÉÏµÄ²Î¿¼µç¼«
+        'stop',1E-7, 'interrupt','on'); % æŽ’é™¤çœ¼ç”µå’Œéžå¤´çš®ä¸Šçš„å‚è€ƒç”µæž
     EEG = pop_iclabel(EEG, 'default');
     EEG = eeg_checkset( EEG );
     EEG = pop_icflag(EEG, [0 0;0.9 1;0.9 1;0.9 1;0.9 1;0.9 1;0.9 1]);
     reject_idx = EEG.reject.gcompreject;
-    reject_idx = reject_idx(1:20);   % Èç¹û128µ¼£¬Ö»¿¼ÂÇÇ°60¸ö³É·Ö Èç¹û64µ¼£¬Ö»¿¼ÂÇÇ°30¸ö³É·Ö  Èç¹ûÊÇ32µ¼£¬Ö»¿¼ÂÇÇ°20¸ö³É·Ö ¸Ä³É20
+    reject_idx = reject_idx(1:20);   % å¦‚æžœ128å¯¼ï¼Œåªè€ƒè™‘å‰60ä¸ªæˆåˆ† å¦‚æžœ64å¯¼ï¼Œåªè€ƒè™‘å‰30ä¸ªæˆåˆ†  å¦‚æžœæ˜¯32å¯¼ï¼Œåªè€ƒè™‘å‰20ä¸ªæˆåˆ† æ”¹æˆ20
     reject_idx = find(reject_idx > 0);
     EEG = pop_subcomp(EEG, reject_idx);
     EEG = eeg_checkset( EEG );
@@ -138,3 +124,4 @@ for i = 1:length(subPath)
     
     save(strcat('H:\OA\ProdData\OA-Data0720\',subPath(i).name,'+',string(length(del_epoch)),'_ICAsub'),'EEG','-v7.3');   
 end
+
