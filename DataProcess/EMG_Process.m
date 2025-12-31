@@ -1,33 +1,33 @@
-% ´¦Àí³¤ÆÚÊı¾İ
+% å¤„ç†é•¿æœŸæ•°æ®
 clc;
 clear;
 eeglab;
 
 
-path = 'H:\OA\MI³¤ÆÚ_sel\**';
-% »ñÈ¡Â·¾¶ÏÂµÄËùÓĞÌõÄ¿ĞÅÏ¢
+path = 'H:\OA\MIé•¿æœŸ_sel\**';
+% è·å–è·¯å¾„ä¸‹çš„æ‰€æœ‰æ¡ç›®ä¿¡æ¯
 subPath = dir(path);
-% ¹ıÂËµô.ºÍ..
+% è¿‡æ»¤æ‰.å’Œ..
 subPath = subPath(~ismember({subPath.name}, {'.', '..'}));
-save_folder = 'H:\OA\ProdData\MI(³¤ÆÚ)_sel\EMG\';
+save_folder = 'H:\OA\ProdData\MI(é•¿æœŸ)_sel\EMG\';
 
 
 for i = 1:length(subPath)
 
-    % »ñÈ¡ÄÔµçÊı¾İÎÄ¼şÂ·¾¶
+    % è·å–è„‘ç”µæ•°æ®æ–‡ä»¶è·¯å¾„
     folderPath = strcat(subPath(i).folder,'\', subPath(i).name);
-    % ¶ÁÈ¡ÄÔµçÊı¾İÖĞµÄËùÓĞÎÄ¼ş¼Ğ
+    % è¯»å–è„‘ç”µæ•°æ®ä¸­çš„æ‰€æœ‰æ–‡ä»¶å¤¹
     dataPaths = dir(folderPath);
-    % ÌáÈ¡Ä³¸ö±»ÊÔµÄËùÓĞÎÄ¼ş¼Ğ
+    % æå–æŸä¸ªè¢«è¯•çš„æ‰€æœ‰æ–‡ä»¶å¤¹
     names = {dataPaths.name};
-    % È»ºó½«Æä½øĞĞÅÅĞò  ºó×ª»»Îª×Ö·ûĞÎÊ½
+    % ç„¶åå°†å…¶è¿›è¡Œæ’åº  åè½¬æ¢ä¸ºå­—ç¬¦å½¢å¼
     % foldernames = sort_folders(folderPath, names);
-    % ¶ÁÈ¡ÎÄ¼ş¼ĞÖĞµÄEEGÊı¾İ
+    % è¯»å–æ–‡ä»¶å¤¹ä¸­çš„EEGæ•°æ®
     [EMG, command] = pop_importNDF(folderPath);
     
-    % µ÷ÓÃ getmain º¯Êı´¦Àí EEG ±äÁ¿
+    % è°ƒç”¨ getmain å‡½æ•°å¤„ç† EEG å˜é‡
     result = getEMGdat(EMG.data, 1000); 
-    % ±£´æ´¦Àí½á¹ûÎªÎÄ¼şÃû + '_1.mat'
+    % ä¿å­˜å¤„ç†ç»“æœä¸ºæ–‡ä»¶å + '_1.mat'
     name = subPath(i).name;
     newName = strrep(name, '_1_datRaw', '_1_Proced');
      saveName = fullfile(save_folder, [newName, '.mat']);
